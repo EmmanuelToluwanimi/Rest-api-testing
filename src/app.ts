@@ -7,13 +7,11 @@ import connect from './utils/connect';
 import logger from './utils/logger';
 import routes from './routes';
 import { deserializeUser } from './middleware/deserializeUser';
-
+import createServer from './utils/server';
 
 const PORT = config.get<number>('port') || 5000;
 
-export const app = express();
-app.use(express.json());
-app.use(deserializeUser);
+const app = createServer()
 
 
 app.listen(PORT, async () => {
@@ -22,5 +20,4 @@ app.listen(PORT, async () => {
 
   await connect();
   
-  routes(app);
 });
