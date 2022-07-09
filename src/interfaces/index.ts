@@ -20,6 +20,7 @@ export interface ISession extends mongoose.Document {
 
 export interface IProduct extends mongoose.Document {
     user: IUser["_id"];
+    pid?: string;
     title: string;
     description: string;
     price: number;
