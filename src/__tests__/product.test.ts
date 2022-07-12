@@ -3,6 +3,7 @@ import createServer from "../utils/server";
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { createProduct } from "../service/product.service";
+import { signJwt } from "../utils/jwt.utils";
 
 const app = createServer()
 
@@ -14,6 +15,12 @@ export const productPayload = {
     description: "lorem ipsum dolor sit amet",
     price: 299.99,
     image: "https://source.unsplash.com/user/c_v_r/100x100"
+}
+
+export const userPayload = {
+    _id: userId,
+    name: "John Do",
+    email: "jdoe@example.com",
 }
 
 describe('product', () => {
@@ -30,7 +37,7 @@ describe('product', () => {
 
     })
 
-    describe('get product router', () => {
+    describe('get product route', () => {
 
         /**
          * @Test : Jest test when a product does not exist.
@@ -62,5 +69,38 @@ describe('product', () => {
                 expect(body.title).toBe(product.title);
             })
         })
+        
+    });
+
+    describe('create product route', () => {
+
+        /**
+         * @Test : Jest test when a user is not logged in.
+         */
+        describe('given the user is not logged in', () => {
+            it.only('should return a 403', async () => {
+                const {statusCode} = await supertest(app).post('/api/products');
+
+                expect(statusCode).toBe(403)
+
+            })
+        })
+
+        /**
+         * @Test : Jest test when a user is logged in.
+         */
+         describe('given the user is logged in', () => {
+            it.skip('should return a 200 and create the product', async () => {
+                
+                const jwt = signJwt(userPayload);
+                console.log(jwt)
+                const {statusCode, body } = await supertest(app).post('/api/products').set('Authorization', `Bearer ${jwt}`).send(productPayload)
+
+                expect(statusCode).toBe(200);
+                expect(body).toEqual({});
+                
+            })
+        })
+        
     });
 });
