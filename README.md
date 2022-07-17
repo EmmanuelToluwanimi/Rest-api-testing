@@ -1,3 +1,8 @@
-# REST-API-TS
+# REST-API-Testing
 
-This is a node project created with Typescript. Aim is to build REST APIs with advanced and high performance code with Typescript.
+This project is was implemented with Jest testing library on a node project. Implemented end to end testing.
+
+## Usage
+```
+Yarn test
+```
